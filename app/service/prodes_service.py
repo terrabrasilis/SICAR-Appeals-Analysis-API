@@ -2,7 +2,7 @@ from app.database import get_connection_prodes
 
 def is_valid_prodes_data(uuid):
     
-    biomes = ["pantanal", "amazonia"]
+    biomes = ["pantanal", "amazonia", "cerrado", "pampa", "caatinga", "mata_atlantica"]
     prodes_data = None
 
     for biome in biomes:
@@ -38,6 +38,8 @@ def is_valid_prodes_data(uuid):
             if row:
                 columns = [desc[0] for desc in cursor.description]
                 prodes_data = dict(zip(columns, row))
+                prodes_data['biome'] = biome
+                prodes_data['layer'] = table_name
                 
                 cursor.close()
                 conn.close()
@@ -55,7 +57,7 @@ def get_table_name_by_uuid(uuid, cursor):
     
 def get_prodes_data_by_uuid(uuid):
     
-    biomes = ["pantanal", "amazonia"]
+    biomes = ["pantanal", "amazonia", "cerrado", "pampa", "caatinga", "mata_atlantica"]
     
     for biome in biomes:
         conn = get_connection_prodes(biome)
@@ -73,6 +75,7 @@ def get_prodes_data_by_uuid(uuid):
             if row:
                 columns = [desc[0] for desc in cursor.description]
                 prodes_data = dict(zip(columns, row))
+                prodes_data['layer'] = table_name
                 
         cursor.close()
         conn.close()
@@ -82,7 +85,7 @@ def get_prodes_data_by_uuid(uuid):
 
 def get_prodes_geometry_by_uuid(uuid):
     
-    biomes = ["pantanal", "amazonia"]
+    biomes = ["pantanal", "amazonia", "cerrado", "pampa", "caatinga", "mata_atlantica"]
     
     for biome in biomes:
         conn = get_connection_prodes(biome)

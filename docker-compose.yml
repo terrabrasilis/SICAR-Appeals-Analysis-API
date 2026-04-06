@@ -10,12 +10,24 @@ services:
     environment:
       - "DB_URL_PANTANAL=/run/secrets/prodes.pantanal.database.url"
       - "DB_URL_AMAZONIA=/run/secrets/prodes.amazonia.database.url"
+      - "DB_URL_CERRADO=/run/secrets/prodes.cerrado.database.url"
+      - "DB_URL_PAMPA=/run/secrets/prodes.pampa.database.url"
+      - "DB_URL_CAATINGA=/run/secrets/prodes.caatinga.database.url"
+      - "DB_URL_MATA_ATLANTICA=/run/secrets/prodes.mata_atlantica.database.url"
       - "DB_URL_SICAR=/run/secrets/sicar.database.url"
 
 secrets:
   prodes.pantanal.database.url:
     external: true
   prodes.amazonia.database.url:
+    external: true
+  prodes.cerrado.database.url:
+    external: true
+  prodes.pampa.database.url:
+    external: true
+  prodes.caatinga.database.url:
+    external: true
+  prodes.mata_atlantica.database.url:
     external: true
   sicar.database.url:
     external: true
