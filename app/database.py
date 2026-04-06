@@ -32,6 +32,10 @@ def get_connection_prodes(biome):
     secret_map = {
         "pantanal": "DB_URL_PANTANAL",
         "amazonia": "DB_URL_AMAZONIA",
+        "cerrado": "DB_URL_CERRADO",
+        "pampa": "DB_URL_PAMPA",
+        "caatinga": "DB_URL_CAATINGA",
+        "mata_atlantica": "DB_URL_MATA_ATLANTICA"
     }
 
     secret_name = secret_map.get(biome)
