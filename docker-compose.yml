@@ -1,0 +1,29 @@
+services:
+  app:
+    image: sicar-appeals-analysis-api:latest
+    ports:
+      - "8001:8001"
+    secrets:
+      - prodes.pantanal.database.url
+      - prodes.amazonia.database.url
+      - sicar.database.url
+    environment:
+      - "DB_URL_PANTANAL=/run/secrets/prodes.pantanal.database.url"
+      - "DB_URL_AMAZONIA=/run/secrets/prodes.amazonia.database.url"
+      - "DB_URL_SICAR=/run/secrets/sicar.database.url"
+
+secrets:
+  prodes.pantanal.database.url:
+    external: true
+  prodes.amazonia.database.url:
+    external: true
+  sicar.database.url:
+    external: true
+
+# secrets:
+#   prodes_pantanal_database_url:
+#     file: ./secrets/prodes.pantanal.database.url
+#   prodes_amazonia_database_url:
+#     file: ./secrets/prodes.amazonia.database.url
+#   sicar_database_url:
+#     file: ./secrets/sicar.database.url
