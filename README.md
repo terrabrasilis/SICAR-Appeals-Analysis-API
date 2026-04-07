@@ -79,6 +79,10 @@ A aplicação utiliza secrets para informações sensíveis. Garanta que os secr
 
 - `prodes.pantanal.database.url`
 - `prodes.amazonia.database.url`
+- `prodes.cerrado.database.url`
+- `prodes.pampa.database.url`
+- `prodes.mata_atlantica.database.url`
+- `prodes.caatinga.database.url`
 - `sicar.database.url`
 
 No Docker Swarm, os secrets podem ser criados via CLI:
