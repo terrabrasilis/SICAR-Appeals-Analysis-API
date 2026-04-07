@@ -3,7 +3,6 @@
 from flask import request
 from flask_restx import Namespace, Resource
 from app.service.sicar_service import *
-from app.utils import serialize_for_json
 from app.models.sicar import get_validate_response_model, get_sicar_data_response_model
 
 api = Namespace('sicar', description='Operações relacionadas ao SICAR')
@@ -28,28 +27,20 @@ class GetSicarByCodImovel(Resource):
     def get(self, cod_imovel):
         """Obtém dados SICAR pelo código do imóvel informado."""
         sicar_data = get_sicar_data_by_cod_imovel(cod_imovel)
-        if sicar_data:
-            return sicar_data
-        else:
-            return {"error": f"Dados SICAR não encontrados para cod_imovel: {cod_imovel}"}, 404
+        return sicar_data if sicar_data else {"error": "Dado não encontrado para o código do imóvel informado."}, 404
         
-# @api.route('/geometries_intersects')
-# @api.doc(params={'cod_imovel': 'Código do imóvel', 'uuid': 'UUID do dado PRODES'})
-# class SicarIntersectsProdes(Resource):
-#     @api.response(200, 'Success')
-#     @api.response(400, 'Invalid input')
-#     def get(self):
-#         """Verifica se a geometria do SICAR intersecta com a geometria do PRODES."""
-#         cod_imovel = request.args.get('cod_imovel')
-#         uuid = request.args.get('uuid')
+@api.route('/geometries_intersects')
+@api.doc(params={'cod_imovel': 'Código do imóvel', 'uuid': 'UUID do dado PRODES'})
+class SicarIntersectsProdes(Resource):
+    @api.response(200, 'Success')
+    @api.response(400, 'Invalid input')
+    def get(self):
+        """Verifica se a geometria do SICAR intersecta com a geometria do PRODES."""
+        cod_imovel = request.args.get('cod_imovel')
+        uuid = request.args.get('uuid')
 
-#         if not cod_imovel or not uuid:
-#             return {"error": "Tanto cod_imovel quanto uuid são obrigatórios."}, 400
+        if not cod_imovel or not uuid:
+            return {"error": "Tanto cod_imovel quanto uuid são obrigatórios."}, 400
 
-#         intersects = sicar_intersects_prodes(cod_imovel, uuid)
-
-#         return {
-#             "cod_imovel": cod_imovel,
-#             "uuid": uuid,
-#             "intersects": intersects
-#         }
+        intersects = sicar_intersects_prodes(cod_imovel, uuid)
+        return intersects

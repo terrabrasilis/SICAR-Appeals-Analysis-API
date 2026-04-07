@@ -78,3 +78,33 @@ def get_prodes_data_by_uuid(uuid):
         conn.close()
         
     return prodes_data if row else None
+
+def get_prodes_geometry_by_uuid(uuid):
+    
+    biomes = ["pantanal", "amazonia", "cerrado", "pampa", "caatinga", "mata_atlantica"]
+    
+    for biome in biomes:
+        
+        try:
+            conn = get_connection_prodes(biome)
+            cursor = conn.cursor()
+        except Exception:
+            continue
+        
+        if not conn or not cursor:
+            continue
+        
+        table_name = get_table_name_by_uuid(uuid, cursor)
+        
+        if table_name:
+            cursor.execute(f"SELECT geom FROM public.{table_name} WHERE uuid = '{uuid}'")
+            row = cursor.fetchone()
+            
+            cursor.close()
+            conn.close()
+
+            if row:
+                return row[0]
+        
+        cursor.close()
+        conn.close()
