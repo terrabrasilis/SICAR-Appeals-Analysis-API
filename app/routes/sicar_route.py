@@ -17,9 +17,8 @@ class ValidateSicar(Resource):
     @api.response(200, 'Success', validate_response)
     def get(self, cod_imovel):
         """Valida se o código do imóvel informado é válido no SICAR."""
-        geometry = get_sicar_geometry_by_cod_imovel(cod_imovel)
-        is_valid = geometry is not None
-        return {"cod_imovel": cod_imovel, "geometry": geometry, "is_valid": is_valid}
+        is_valid = validate_sicar_data(cod_imovel)
+        return {"cod_imovel": cod_imovel, "is_valid": is_valid}
 
 @api.route('/<string:cod_imovel>')
 @api.doc(params={'cod_imovel': 'Código do imóvel'})
@@ -30,27 +29,27 @@ class GetSicarByCodImovel(Resource):
         """Obtém dados SICAR pelo código do imóvel informado."""
         sicar_data = get_sicar_data_by_cod_imovel(cod_imovel)
         if sicar_data:
-            return serialize_for_json(sicar_data)
+            return sicar_data
         else:
             return {"error": f"Dados SICAR não encontrados para cod_imovel: {cod_imovel}"}, 404
         
-@api.route('/geometries_intersects')
-@api.doc(params={'cod_imovel': 'Código do imóvel', 'uuid': 'UUID do dado PRODES'})
-class SicarIntersectsProdes(Resource):
-    @api.response(200, 'Success')
-    @api.response(400, 'Invalid input')
-    def get(self):
-        """Verifica se a geometria do SICAR intersecta com a geometria do PRODES."""
-        cod_imovel = request.args.get('cod_imovel')
-        uuid = request.args.get('uuid')
+# @api.route('/geometries_intersects')
+# @api.doc(params={'cod_imovel': 'Código do imóvel', 'uuid': 'UUID do dado PRODES'})
+# class SicarIntersectsProdes(Resource):
+#     @api.response(200, 'Success')
+#     @api.response(400, 'Invalid input')
+#     def get(self):
+#         """Verifica se a geometria do SICAR intersecta com a geometria do PRODES."""
+#         cod_imovel = request.args.get('cod_imovel')
+#         uuid = request.args.get('uuid')
 
-        if not cod_imovel or not uuid:
-            return {"error": "Tanto cod_imovel quanto uuid são obrigatórios."}, 400
+#         if not cod_imovel or not uuid:
+#             return {"error": "Tanto cod_imovel quanto uuid são obrigatórios."}, 400
 
-        intersects = sicar_intersects_prodes(cod_imovel, uuid)
+#         intersects = sicar_intersects_prodes(cod_imovel, uuid)
 
-        return {
-            "cod_imovel": cod_imovel,
-            "uuid": uuid,
-            "intersects": intersects
-        }
+#         return {
+#             "cod_imovel": cod_imovel,
+#             "uuid": uuid,
+#             "intersects": intersects
+#         }
