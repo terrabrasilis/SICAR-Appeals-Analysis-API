@@ -18,9 +18,8 @@ class ValidateProdes(Resource):
         is_uuid = is_valid_uuid(uuid)
         if not is_uuid:
             return {"error": f"Invalid UUID format: {uuid}"}, 400
-        result = is_valid_prodes_data(uuid)
-        is_valid = bool(result)
-        return {"uuid": uuid, "is_valid": is_valid, "data": serialize_for_json(result) if result else None}
+        result = validate_prodes_data(uuid)
+        return result
 
 @api.route('/<string:uuid>')
 @api.doc(params={'uuid': 'UUID do dado PRODES'})
@@ -35,6 +34,6 @@ class GetProdesByUUID(Resource):
             return {"error": f"Invalid UUID format: {uuid}"}, 400
         prodes_data = get_prodes_data_by_uuid(uuid)
         if prodes_data:
-            return serialize_for_json(prodes_data)
+            return prodes_data
         else:
             return {"error": f"prodes data not found for uuid: {uuid}"}, 404
