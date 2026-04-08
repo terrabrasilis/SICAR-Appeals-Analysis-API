@@ -2,13 +2,14 @@
 
 from flask import request
 from flask_restx import Namespace, Resource
-from app.service.sicar_service import *
-from app.models.sicar import get_validate_response_model, get_sicar_data_response_model
+from app.service.sicar_service import validate_sicar_data, get_sicar_data_by_cod_imovel, sicar_intersects_prodes
+from app.models.sicar import get_validate_response_model, get_sicar_data_response_model, get_sicar_intersects_response_model
 
 api = Namespace('sicar', description='Operações relacionadas ao SICAR')
 
 validate_response = get_validate_response_model(api)
 sicar_data_response = get_sicar_data_response_model(api)
+sicar_intersects_prodes_response = get_sicar_intersects_response_model(api)
 
 @api.route('/validate/<string:cod_imovel>')
 @api.doc(params={'cod_imovel': 'Código do imóvel'})
@@ -32,8 +33,8 @@ class GetSicarByCodImovel(Resource):
 @api.route('/geometries_intersects')
 @api.doc(params={'cod_imovel': 'Código do imóvel', 'uuid': 'UUID do dado PRODES'})
 class SicarIntersectsProdes(Resource):
-    @api.response(200, 'Success')
-    @api.response(400, 'Invalid input')
+    @api.response(200, 'Success', sicar_intersects_prodes_response)
+    @api.response(400, 'Invalid input', sicar_intersects_prodes_response)
     def get(self):
         """Verifica se a geometria do SICAR intersecta com a geometria do PRODES."""
         cod_imovel = request.args.get('cod_imovel')

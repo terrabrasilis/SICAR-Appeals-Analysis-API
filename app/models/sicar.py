@@ -13,3 +13,14 @@ def get_sicar_data_response_model(api):
         "geometry": fields.Raw(description='Geometria do dado SICAR'),
         'error': fields.String(description='Mensagem de erro', required=False)
     })
+
+def get_sicar_intersects_response_model(api):
+    return api.model('SicarIntersectsProdesResponse', {
+        "properties": {
+            "cod_imovel": fields.String(description='Código do imóvel'),
+            "uuid": fields.String(description='UUID do dado PRODES'),
+            "intersects": fields.Boolean(description='Se as geometrias intersectam')
+        },
+        "geometry": fields.Raw(description='Geometria da interseção, se houver'),
+        'error': fields.String(description='Mensagem de erro', required=False)
+    })

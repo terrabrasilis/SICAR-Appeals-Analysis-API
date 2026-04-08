@@ -74,4 +74,21 @@ def sicar_intersects_prodes(cod_imovel, uuid):
         cursor.close()
         conn.close()
         
-        return row[0] if row and row[0] else {"message": "As geometrias não intersectam ou a interseção é nula."}
+        if row and row[0]:
+            return {
+                "properties": {
+                    "cod_imovel": cod_imovel,
+                    "uuid": uuid,
+                    "intersects": True,
+                },
+                "geometry": row[0]
+            }
+        else:
+            return {
+                "properties": {
+                    "cod_imovel": cod_imovel,
+                    "uuid": uuid,
+                    "intersects": False,
+                },
+                "geometry": None
+            }
