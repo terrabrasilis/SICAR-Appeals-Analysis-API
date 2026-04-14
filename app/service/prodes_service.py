@@ -67,7 +67,8 @@ def get_prodes_data_by_uuid(uuid):
             if row:
                 prodes_data = {
                     "properties": row[0]['properties'],
-                    "geometry": row[0]['geometry']                    
+                    "type": row[0]['type'],
+                    "geometry": row[0]['geometry']
                 }
                 
                 prodes_data['properties']['uuid'] = uuid
@@ -108,3 +109,5 @@ def get_prodes_geometry_by_uuid(uuid):
         
         cursor.close()
         conn.close()
+        
+    return None

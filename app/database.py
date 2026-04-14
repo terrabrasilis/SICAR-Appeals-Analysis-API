@@ -8,7 +8,6 @@ SECRETS_DIR = Path("/run/secrets")
 
 def _read_secret(secret_name: str) -> str | None:
     secret_path = os.environ.get(secret_name)
-    print(secret_path)
     if os.path.exists(secret_path):
         with open(secret_path, 'r') as f:
             return f.read().strip()

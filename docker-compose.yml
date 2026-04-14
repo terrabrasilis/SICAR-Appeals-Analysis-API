@@ -6,6 +6,10 @@ services:
     secrets:
       - prodes.pantanal.database.url
       - prodes.amazonia.database.url
+      - prodes.cerrado.database.url
+      - prodes.pampa.database.url
+      - prodes.caatinga.database.url
+      - prodes.mata_atlantica.database.url
       - sicar.database.url
     environment:
       - "DB_URL_PANTANAL=/run/secrets/prodes.pantanal.database.url"
@@ -31,11 +35,3 @@ secrets:
     external: true
   sicar.database.url:
     external: true
-
-# secrets:
-#   prodes_pantanal_database_url:
-#     file: ./secrets/prodes.pantanal.database.url
-#   prodes_amazonia_database_url:
-#     file: ./secrets/prodes.amazonia.database.url
-#   sicar_database_url:
-#     file: ./secrets/sicar.database.url
