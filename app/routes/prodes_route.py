@@ -1,12 +1,16 @@
 from flask_restx import Namespace, Resource
 from app.service.prodes_service import *
 from app.utils import is_valid_uuid
+from app.schemas.prodes_schema import ProdesValidateDataRequestSchema
+from marshmallow import ValidationError
 
 from app.models.prodes import get_validate_prodes_response_model, get_prodes_data_response_model
 
 api = Namespace('prodes', description='Operações relacionadas ao PRODES')
 validate_response = get_validate_prodes_response_model(api)
 prodes_data_response = get_prodes_data_response_model(api)
+
+prodes_validate_schema = ProdesValidateDataRequestSchema()
 
 @api.route('/validate/<string:uuid>')
 @api.doc(params={'uuid': 'UUID do dado PRODES'})
@@ -15,10 +19,11 @@ class ValidateProdes(Resource):
     @api.response(400, 'UUID inválido', validate_response)
     def get(self, uuid):
         """Valida se o UUID informado é válido e se existe dado PRODES correspondente."""
-        is_uuid = is_valid_uuid(uuid)
-        if not is_uuid:
-            return {"error": f"Invalid UUID format: {uuid}"}, 400
-        return validate_prodes_data(uuid)
+        try:
+            data = prodes_validate_schema.load({"uuid": uuid})
+            return validate_prodes_data(str(data["uuid"]))
+        except ValidationError as err:
+            return {"errors": err.messages}, 400
 
 @api.route('/<string:uuid>')
 @api.doc(params={'uuid': 'UUID do dado PRODES'})
@@ -28,8 +33,9 @@ class GetProdesByUUID(Resource):
     @api.response(404, 'Dado não encontrado', prodes_data_response)
     def get(self, uuid):
         """Obtém dados PRODES pelo UUID informado."""
-        is_uuid = is_valid_uuid(uuid)
-        if not is_uuid:
-            return {"error": f"Invalid UUID format: {uuid}"}, 400
-        prodes_data = get_prodes_data_by_uuid(uuid)
-        return prodes_data if prodes_data else {"error": f"Dado PRODES não encontrado para UUID: {uuid}"}, 404
+        try:
+            data = prodes_validate_schema.load({"uuid": uuid})
+            prodes_data = get_prodes_data_by_uuid(str(data["uuid"]))
+            return prodes_data if prodes_data else {"error": f"Dado PRODES não encontrado para UUID: {uuid}"}, 404
+        except ValidationError as err:
+            return {"errors": err.messages}, 400
