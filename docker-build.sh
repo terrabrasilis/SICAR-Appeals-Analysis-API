@@ -6,11 +6,11 @@
 VERSION=$(git describe --tags --abbrev=0)
 export VERSION
 # build all images
-docker build --no-cache -t terrabrasilis/SICAR-Appeals-Analysis-API:$VERSION --build-arg VERSION=$VERSION -f environment/Dockerfile .
+docker build --no-cache -t terrabrasilis/sicar-appeals-analysis-api:$VERSION --build-arg VERSION=$VERSION -f ./Dockerfile .
 
 # send to dockerhub
 docker login
-docker push terrabrasilis/SICAR-Appeals-Analysis-API:$VERSION
+docker push terrabrasilis/sicar-appeals-analysis-api:$VERSION
 
 # If you want run containers, uncomment this lines
-#docker run -d --rm -p 84:80 --name SICAR-Appeals-Analysis-API terrabrasilis/SICAR-Appeals-Analysis-API
+#docker run -d --rm -p 84:80 --name SICAR-Appeals-Analysis-API terrabrasilis/sicar-appeals-Analysis-API
