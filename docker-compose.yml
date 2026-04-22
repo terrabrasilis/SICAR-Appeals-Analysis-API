@@ -19,6 +19,7 @@ services:
       - "DB_URL_CAATINGA=/run/secrets/prodes.caatinga.database.url"
       - "DB_URL_MATA_ATLANTICA=/run/secrets/prodes.mata_atlantica.database.url"
       - "DB_URL_SICAR=/run/secrets/sicar.database.url"
+      - "SCRIPT_NAME=/sicar-prodes-api/"
 
 secrets:
   prodes.pantanal.database.url:
