@@ -6,7 +6,7 @@
 VERSION=$(git describe --tags --abbrev=0)
 
 # build all images
-docker build --no-cache -t terrabrasilis/sicar-appeals-analysis-api:v$VERSION -f ./Dockerfile .
+docker build -t terrabrasilis/sicar-appeals-analysis-api:v$VERSION -f ./Dockerfile .
 
 # send to dockerhub
 docker login
