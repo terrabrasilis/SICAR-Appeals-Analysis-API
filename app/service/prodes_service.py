@@ -28,7 +28,7 @@ def validate_prodes_data(uuid):
                 
                 
 def get_table_name_by_uuid(uuid, cursor):
-    cursor.execute(f"SELECT tablename FROM public.deforestation WHERE uuid = '{uuid}'")
+    cursor.execute(f"SELECT tablename FROM public.search_deforestation_uuid WHERE uuid = '{uuid}'")
     result = cursor.fetchone()
     return result[0] if result else None
     
