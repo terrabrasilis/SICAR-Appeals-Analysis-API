@@ -12,6 +12,7 @@ def get_validate_prodes_response_model(api):
 def get_prodes_data_response_model(api):
     return api.model('ProdesDataResponse', {
         "properties": fields.Raw(description='Propriedades do dado PRODES, exceto a geometria'),
+        "type": fields.String(description='No formato GeoJSON (definido pela especificação oficial), geometria + propriedades (attributes) = feature', required=False, example='Feature'),
         "geometry": fields.Raw(description='Geometria do dado PRODES em formato GeoJSON'),
         'error': fields.String(description='Mensagem de erro', required=False)
     })
