@@ -15,7 +15,7 @@ sicar_data_response = get_sicar_data_response_model(api)
 sicar_intersects_prodes_response = get_sicar_intersects_response_model(api)
 error_response = get_error_response_model(api)
 sicar_intersects_error_response = get_sicar_intersects_response_error_model(api)
-sicar_error_404_response = get_error_response_model(api)
+sicar_error_404_response = get_error_response_model_404(api)
 
 sicar_schema = ValidadeSicarRequestSchema()
 sicar_intersects_schema = SicarIntersectsProdesRequestSchema()

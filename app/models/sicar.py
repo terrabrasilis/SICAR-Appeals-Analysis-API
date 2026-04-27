@@ -26,12 +26,12 @@ def get_sicar_intersects_response_model(api):
     })
 
 def get_error_response_model_404(api):
-    return api.model('ErrorResponse404', {
+    return api.model('SicarErrorResponse404', {
         'error': fields.String(description='Mensagem de erro')
     }) 
 
 def get_error_response_model(api):
-    return api.model('ErrorResponse', {
+    return api.model('SicarErrorResponse', {
         'errors': fields.Nested(api.model('FieldErrors', {
             'cod_imovel': fields.List(fields.String, description='Lista de erros relacionados ao campo cod_imovel')
         }))

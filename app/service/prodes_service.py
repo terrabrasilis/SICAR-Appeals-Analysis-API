@@ -33,52 +33,63 @@ def get_table_name_by_uuid(uuid, cursor):
     return result[0] if result else None
     
 def get_prodes_data_by_uuid(uuid):
-    
+
     biomes = ["pantanal", "amazonia", "cerrado", "pampa", "caatinga", "mata_atlantica"]
-    
+
     for biome in biomes:
-        
+
+        conn = None
+        cursor = None
+
         try:
             conn = get_connection_prodes(biome)
+
+            if not conn:
+                continue
+
             cursor = conn.cursor()
-        except Exception:
-            continue
-        
-        if not conn or not cursor:
-            continue
-        
-        table_name = get_table_name_by_uuid(uuid, cursor)
-        
-        if table_name:
+
+            table_name = get_table_name_by_uuid(uuid, cursor)
+
+            if not table_name:
+                continue
+
             cursor.execute(f"""
                 SELECT jsonb_build_object(
                     'type', 'Feature',
                     'properties', to_jsonb(t) - 'geom',
-                    'geometry', ST_AsGeoJSON(t.geom, 9, 4|1)::jsonb                    
+                    'geometry', ST_AsGeoJSON(t.geom, 9, 4|1)::jsonb
                 )
                 FROM public.{table_name} t
-                WHERE uuid = '{uuid}';
-            """)
+                WHERE uuid = %s;
+            """, (uuid,))
+
             row = cursor.fetchone()
-            
-            cursor.close()
-            conn.close()
 
             if row:
                 prodes_data = {
-                    "properties": row[0]['properties'],
-                    "type": row[0]['type'],
-                    "geometry": row[0]['geometry']
+                    "properties": row[0]["properties"],
+                    "type": row[0]["type"],
+                    "geometry": row[0]["geometry"]
                 }
-                
-                prodes_data['properties']['uuid'] = uuid
-                prodes_data['properties']['biome'] = biome
-                prodes_data['properties']['layer'] = table_name
-                
-        cursor.close()
-        conn.close()
-        
-    return prodes_data if row else None
+
+                prodes_data["properties"]["uuid"] = uuid
+                prodes_data["properties"]["biome"] = biome
+                prodes_data["properties"]["layer"] = table_name
+
+                return prodes_data
+
+        except Exception:
+            continue
+
+        finally:
+            if cursor:
+                cursor.close()
+
+            if conn:
+                conn.close()
+
+    return None
 
 def get_prodes_geometry_by_uuid(uuid):
     

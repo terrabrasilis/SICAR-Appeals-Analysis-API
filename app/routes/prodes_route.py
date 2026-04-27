@@ -29,6 +29,7 @@ class ValidateProdes(Resource):
 @api.route('/<string:uuid>')
 @api.doc(params={'uuid': 'UUID do dado PRODES'})
 class GetProdesByUUID(Resource):
+
     @api.response(200, 'Success', prodes_data_response)
     @api.response(400, 'UUID inválido', error_response)
     @api.response(404, 'Dado não encontrado', error_response_404)
@@ -40,7 +41,12 @@ class GetProdesByUUID(Resource):
 
             if prodes_data:
                 return prodes_data, 200
-            return {"error": f"Dado PRODES não encontrado para UUID: {uuid}"}, 404
+
+            return {
+                "error": f"Dado PRODES não encontrado para UUID: {uuid}"
+            }, 404
 
         except ValidationError as err:
-            return {"errors": err.messages}, 400
+            return {
+                "errors": err.messages
+            }, 400
